@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Immersion Lab — Functional Research Prototype</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="app-header">
+  <div class="brand"><div class="brand-icon">IL</div><div><strong>Immersion Lab</strong><small>game research prototype</small></div></div>
+  <nav>
+    <button data-section="overview">Overview</button><button data-section="setup">Study Setup</button><button data-section="sessions">Sessions</button><button data-section="scores">Score Lab</button><button data-section="correlation">Correlation Lab</button><button data-section="exports">Export</button>
+  </nav>
+</header>
+<main>
+<section id="overview" class="page active">
+  <div class="hero">
+    <div><p class="eyebrow">Functional prototype for developers and researchers</p><h1>Measure where immersion starts, breaks, and returns.</h1><p class="lede">Create a study, run timed playtests, code observations, score games, calculate correlations, and export structured research data.</p><div class="hero-actions"><button class="primary" data-section="setup">Create study</button><button class="secondary" data-section="sessions">Run session</button></div></div>
+    <div class="hero-visual card"><div class="radar"><span class="ring ring-1"></span><span class="ring ring-2"></span><span class="ring ring-3"></span><span class="radar-dot dot-1"></span><span class="radar-dot dot-2"></span><span class="radar-dot dot-3"></span><div class="radar-center">IM</div></div><div class="hero-status"><strong>Research system ready</strong><span>No imported data · Local browser storage</span></div></div>
+  </div>
+  <div class="stats-grid"><article class="stat-card"><span id="countGames">0</span><p>Games</p></article><article class="stat-card"><span id="countParticipants">0</span><p>Participants</p></article><article class="stat-card"><span id="countSessions">0</span><p>Sessions</p></article><article class="stat-card"><span id="countNotes">0</span><p>Timed observations</p></article></div>
+  <div class="grid two"><article class="card"><div class="card-head"><div><p class="eyebrow">Live summary</p><h2>Game immersion scores</h2></div></div><div id="overviewBars" class="bar-chart empty-state">No scorecards yet.</div></article><article class="card"><div class="card-head"><div><p class="eyebrow">Research readiness</p><h2>Quality checks</h2></div></div><div id="qualityChecklist" class="quality-list"></div></article></div>
+</section>
+
+<section id="setup" class="page">
+  <div class="page-heading"><p class="eyebrow">Study Setup</p><h1>Build the study from scratch.</h1><p>Add the game builds and participant groups you are testing.</p></div>
+  <div class="grid two">
+    <article class="card"><div class="card-head"><div><p class="eyebrow">Games</p><h2>Add game or build</h2></div></div><form id="gameForm" class="form-grid"><label>Game / build name<input id="gameName" required placeholder="Prototype Build A" /></label><label>Genre<input id="gameGenre" placeholder="Narrative action" /></label><label>Design focus<input id="gameFocus" placeholder="Movement, story, combat..." /></label><label>Build version<input id="gameVersion" placeholder="v0.3" /></label><button class="primary" type="submit">Add game</button></form></article>
+    <article class="card"><div class="card-head"><div><p class="eyebrow">Participants</p><h2>Add participant</h2></div></div><form id="participantForm" class="form-grid"><label>Participant name / ID<input id="participantName" required placeholder="P01" /></label><label>Player group<select id="participantGroup"><option>New / non-gaming participant</option><option>Seasoned gamer</option><option>Accessibility tester</option><option>Internal developer</option><option>Other</option></select></label><label>Experience<input id="participantExperience" placeholder="5+ years" /></label><label>Notes<input id="participantNotes" placeholder="Mechanics-first, story-first..." /></label><button class="primary" type="submit">Add participant</button></form></article>
+  </div>
+  <div class="grid two"><article class="card"><div class="card-head"><div><p class="eyebrow">Current games</p><h2>Game roster</h2></div></div><div id="gameRoster" class="roster"></div></article><article class="card"><div class="card-head"><div><p class="eyebrow">Current participants</p><h2>Participant roster</h2></div></div><div id="participantRoster" class="roster"></div></article></div>
+  <article class="card"><div class="card-head"><div><p class="eyebrow">Model definitions</p><h2>Immersion metrics</h2></div><span class="badge">1–5 scale</span></div><div id="metricDefinitions" class="metric-grid"></div></article>
+</section>
+
+<section id="sessions" class="page">
+  <div class="page-heading"><p class="eyebrow">Playtest Sessions</p><h1>Capture what happens while the player is playing.</h1><p>Create a session, run the timer, and record observations at each checkpoint.</p></div>
+  <div class="grid session-grid">
+    <article class="card"><div class="card-head"><div><p class="eyebrow">Session controls</p><h2>Run playtest</h2></div></div><div class="form-grid"><label>Participant<select id="sessionParticipant"></select></label><label>Game<select id="sessionGame"></select></label><label>Session length<select id="sessionLength"><option value="20">20 minutes</option><option value="30">30 minutes</option><option value="40" selected>40 minutes</option><option value="60">60 minutes</option></select></label><label>Checkpoint interval<select id="checkpointInterval"><option value="5" selected>Every 5 minutes</option><option value="10">Every 10 minutes</option></select></label><button id="createSession" class="primary" type="button">Create session</button></div><div class="timer-box"><span id="timer">40:00</span><div><button id="startTimer" class="primary" type="button">Start</button><button id="pauseTimer" class="secondary" type="button">Pause</button><button id="resetTimer" class="secondary" type="button">Reset</button></div></div><div id="activeSessionSummary" class="notice">No active session.</div></article>
+    <article class="card"><div class="card-head"><div><p class="eyebrow">Timed observation</p><h2>Record note</h2></div></div><form id="observationForm" class="form-grid"><label>Checkpoint minute<input id="observationMinute" type="number" min="0" value="5" /></label><label>Immersion pulse: <strong id="pulseDisplay">3</strong>/5<input id="observationPulse" type="range" min="1" max="5" value="3" /></label><label>Primary metric<select id="observationPrimary"></select></label><label>Secondary metric<select id="observationSecondary"></select></label><label>Fatigue / disengagement<select id="observationFatigue"><option>No</option><option>Maybe</option><option>Yes</option></select></label><label class="full">Observation<textarea id="observationText" required placeholder="What happened? What did the player say, do, ignore, repeat, or struggle with?"></textarea></label><button class="primary" type="submit">Save observation</button></form></article>
+  </div>
+  <article class="card"><div class="card-head"><div><p class="eyebrow">Session log</p><h2>Saved observations</h2></div><div class="inline-filters"><select id="observationGameFilter"></select><select id="observationParticipantFilter"></select></div></div><div class="table-wrap"><table><thead><tr><th>Game</th><th>Participant</th><th>Minute</th><th>Pulse</th><th>Metrics</th><th>Fatigue</th><th>Observation</th><th></th></tr></thead><tbody id="observationTable"></tbody></table></div></article>
+</section>
+
+<section id="scores" class="page">
+  <div class="page-heading"><p class="eyebrow">Score Lab</p><h1>Convert qualitative playtest evidence into comparable scores.</h1><p>Score each game from 1–5 across the immersion model.</p></div>
+  <div class="grid score-grid"><article class="card"><div class="card-head"><div><p class="eyebrow">Game scorecard</p><h2>Enter scores</h2></div></div><form id="scoreForm" class="form-grid"><label>Game<select id="scoreGame"></select></label><div id="metricInputs" class="metric-inputs full"></div><label>Replay intent index: <strong id="replayDisplay">3</strong>/5<input id="replayInput" type="range" min="1" max="5" value="3" /></label><label>Commercial signal / sales proxy: <strong id="salesDisplay">3</strong>/5<input id="salesInput" type="range" min="1" max="5" value="3" /></label><button class="primary" type="submit">Save scorecard</button></form></article><article class="card score-preview"><div class="card-head"><div><p class="eyebrow">Live calculation</p><h2>Current score</h2></div></div><div class="score-orb"><span id="liveImmersionScore">60%</span></div><p id="scoreInterpretation">Moderate immersion signal.</p><div class="formula"><strong>Formula</strong><code>(sum of 9 metrics ÷ 45) × 100</code></div></article></div>
+  <article class="card"><div class="card-head"><div><p class="eyebrow">Comparison matrix</p><h2>Saved scorecards</h2></div></div><div class="table-wrap"><table><thead id="scoreTableHead"></thead><tbody id="scoreTableBody"></tbody></table></div></article>
+</section>
+
+<section id="correlation" class="page">
+  <div class="page-heading"><p class="eyebrow">Correlation Lab</p><h1>Test the mathematical relationship between two variables.</h1><p>Select X and Y. The prototype calculates Pearson r, R², regression slope/intercept, and plots each game.</p></div>
+  <div class="grid correlation-grid"><article class="card"><div class="card-head"><div><p class="eyebrow">Analysis controls</p><h2>Choose variables</h2></div></div><div class="form-grid"><label>X variable<select id="correlationX"></select></label><label>Y variable<select id="correlationY"></select></label><button id="calculateCorrelation" class="primary" type="button">Calculate correlation</button></div><div class="correlation-results"><div><span>Pearson r</span><strong id="pearsonResult">—</strong></div><div><span>R²</span><strong id="rSquaredResult">—</strong></div><div><span>Slope</span><strong id="slopeResult">—</strong></div><div><span>Intercept</span><strong id="interceptResult">—</strong></div><div><span>Sample size</span><strong id="sampleSizeResult">0</strong></div></div><div id="correlationInterpretation" class="notice">Add at least two game scorecards, then calculate.</div></article><article class="card"><div class="card-head"><div><p class="eyebrow">Scatterplot</p><h2 id="scatterTitle">Correlation visualization</h2></div></div><div id="scatterContainer" class="scatter-empty">No correlation calculated.</div></article></div>
+  <article class="card"><div class="card-head"><div><p class="eyebrow">Math transparency</p><h2>How the calculation works</h2></div></div><div class="math-grid"><div><strong>Pearson correlation</strong><code>r = Σ[(x − x̄)(y − ȳ)] ÷ √(Σ(x − x̄)² · Σ(y − ȳ)²)</code></div><div><strong>Coefficient of determination</strong><code>R² = r²</code></div><div><strong>Regression slope</strong><code>b₁ = Σ[(x − x̄)(y − ȳ)] ÷ Σ(x − x̄)²</code></div><div><strong>Regression line</strong><code>ŷ = b₀ + b₁x</code></div></div><p class="tiny">Correlation does not prove causation. Small samples should be interpreted as exploratory.</p></article>
+</section>
+
+<section id="exports" class="page">
+  <div class="page-heading"><p class="eyebrow">Export + Reset</p><h1>Download the study data.</h1><p>Export the complete study or individual tables.</p></div>
+  <div class="export-grid"><button id="exportFullJson" class="primary">Export full study JSON</button><button id="exportObservationsCsv" class="primary">Export observations CSV</button><button id="exportScoresCsv" class="primary">Export scorecards CSV</button><button id="downloadBlankTemplate" class="secondary">Download blank template</button><button id="resetEverything" class="danger">Reset all local data</button></div>
+  <article class="card"><div class="card-head"><div><p class="eyebrow">Storage note</p><h2>Prototype data model</h2></div></div><p>This prototype uses browser localStorage, so it works without a server. For real research deployment, connect the same model to authentication, a secure database, role permissions, and consent controls.</p></article>
+</section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
